@@ -30,8 +30,17 @@ local addr = "tcp://127.0.0.1:6666"
 zsocket:bind(addr)
 
 -- Use MessagePack for serialization
+msgpack.set_string'string'
 kp.serialize = msgpack.pack
 kp.deserialize = msgpack.unpack
+
+function string.tobytearray(str)
+    local byteArray = {}
+    for i = 1, #str do
+        byteArray[i] = string.byte(str, i)
+    end
+    return byteArray
+end
 
 local onceTypes = true
 ashita.events.register('packet_in', 'packet_in_callback1', function (e)
@@ -40,12 +49,13 @@ ashita.events.register('packet_in', 'packet_in_callback1', function (e)
     local packetData = {
         id = e.id,
         size = e.size,
-        data = e.data, -- string.fromhex(e.data) --string.hexformat_file(e.data,e.size)
+        data = string.tobytearray(e.data), -- string.fromhex(e.data) --string.hexformat_file(e.data,e.size)
     }
     local serializedPacketData = kp.serialize(packetData)
     zsocket:send(serializedPacketData)
 
     if onceTypes then
+        print(string.tohex(e.data))
         -- print the types of the fields
         for key, value in pairs(packetData) do
             print("Type of " .. key .. ": " .. type(value))
@@ -53,7 +63,6 @@ ashita.events.register('packet_in', 'packet_in_callback1', function (e)
         end
         onceTypes = false
     end
-
 end)
 
 ashita.events.register('command', 'command_cb', function (e)
