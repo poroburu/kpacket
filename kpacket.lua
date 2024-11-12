@@ -5,8 +5,8 @@ addon.version = '0.1.0';
 local ffi = require("ffi")  -- load the FFI library
 
 -- Load the DLL
-local libsodium = ffi.load(ffi.os == "Windows" and string.format('%saddons\\debug\\libzmq-v141-4_3_4\\libsodium.dll', AshitaCore:GetInstallPath()));
-local libzmq = ffi.load(ffi.os == "Windows" and string.format('%saddons\\debug\\libzmq-v141-4_3_4\\libzmq.dll', AshitaCore:GetInstallPath()));
+local libsodium = ffi.load(ffi.os == "Windows" and string.format('%saddons\\kpacket\\libzmq-v141-4_3_4\\libsodium.dll', AshitaCore:GetInstallPath()));
+local libzmq = ffi.load(ffi.os == "Windows" and string.format('%saddons\\kpacket\\libzmq-v141-4_3_4\\libzmq.dll', AshitaCore:GetInstallPath()));
 require('common');
 local lzmq = require('lzmq')
 local msgpack = require('MessagePack') -- Add MessagePack library
